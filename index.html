@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Footy Scoreboard</title>
+
+<style>
+body {
+  margin: 0;
+  background: black;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  width: 90vw;
+  height: 100vh;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  height: 8vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* COLOURS */
+.header { background: #1e1e1e; color: white; }
+.bulldogs { background: #0b3d91; color: white; }
+.opposition { background: white; color: black; }
+.time-section { background: red; color: white; }
+
+/* TEXT */
+.title { font-size: 3.5vh; }
+.subtitle { font-size: 2.5vh; }
+
+/* SCORE VALUES ROW */
+.score-values {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.score-box {
+  width: 40%;
+  height: 80%;
+  border: 2px solid currentColor;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.value {
+  font-size: 3vh;
+  font-weight: bold;
+}
+
+/* BUTTON ROW */
+.button-row {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.button-group {
+  width: 40%;
+  display: flex;
+  justify-content: center;
+  gap: 1vw;
+}
+
+button {
+  width: 5vw;
+  height: 60%;
+  font-size: 2vh;
+}
+
+/* TOTAL */
+.total-box {
+  width: 90%;
+  height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.total-value {
+  font-size: 6.5vh;
+  font-weight: bold;
+}
+
+/* TIME */
+.time-row {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.quarter-box {
+  width: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  font-size: 3vh;
+}
+
+.clock-box {
+  width: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  font-size: 4.5vh;
+  font-weight: bold;
+}
+
+.time-buttons {
+  width: 100%;
+  display: flex;
+  height: 100%;
+}
+
+.time-buttons button {
+  flex: 1;
+  height: 70%;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="row header title">Footy Scores</div>
+
+  <!-- Bulldogs -->
+  <div class="row bulldogs subtitle">Bulldogs</div>
+
+  <div class="row bulldogs score-values">
+    <div class="score-box">
+      <div>Goals</div>
+      <div id="g1" class="value">0</div>
+    </div>
+    <div class="score-box">
+      <div>Behinds</div>
+      <div id="b1" class="value">0</div>
+    </div>
+  </div>
+
+  <div class="row bulldogs button-row">
+    <div class="button-group">
+      <button onclick="updateScore('g1',-1)">-</button>
+      <button onclick="updateScore('g1',1)">+</button>
+    </div>
+    <div class="button-group">
+      <button onclick="updateScore('b1',-1)">-</button>
+      <button onclick="updateScore('b1',1)">+</button>
+    </div>
+  </div>
+
+  <div class="row bulldogs">
+    <div class="total-box">
+      <div id="t1" class="total-value">0</div>
+    </div>
+  </div>
+
+  <!-- Opposition -->
+  <div class="row opposition subtitle">Opposition</div>
+
+  <div class="row opposition score-values">
+    <div class="score-box">
+      <div>Goals</div>
+      <div id="g2" class="value">0</div>
+    </div>
+    <div class="score-box">
+      <div>Behinds</div>
+      <div id="b2" class="value">0</div>
+    </div>
+  </div>
+
+  <div class="row opposition button-row">
+    <div class="button-group">
+      <button onclick="updateScore('g2',-1)">-</button>
+      <button onclick="updateScore('g2',1)">+</button>
+    </div>
+    <div class="button-group">
+      <button onclick="updateScore('b2',-1)">-</button>
+      <button onclick="updateScore('b2',1)">+</button>
+    </div>
+  </div>
+
+  <div class="row opposition">
+    <div class="total-box">
+      <div id="t2" class="total-value">0</div>
+    </div>
+  </div>
+
+  <!-- Time -->
+  <div class="row time-section subtitle">Time</div>
+
+  <div class="row time-section">
+    <div class="time-row">
+      <div id="quarter" class="quarter-box">Q1</div>
+      <div id="clock" class="clock-box">0:00</div>
+    </div>
+  </div>
+
+  <div class="row time-section">
+    <div class="time-buttons">
+      <button onclick="changeQuarter(-1)">-Q</button>
+      <button onclick="changeQuarter(1)">+Q</button>
+      <button onclick="startTimer()">▶</button>
+      <button onclick="pauseTimer()">⏸</button>
+      <button onclick="resetTimer()">↺</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let scores = { g1:0, b1:0, g2:0, b2:0 };
+
+function updateScore(id, delta) {
+  scores[id] = Math.max(0, scores[id] + delta);
+  document.getElementById(id).textContent = scores[id];
+  document.getElementById("t1").textContent = scores.g1*6 + scores.b1;
+  document.getElementById("t2").textContent = scores.g2*6 + scores.b2;
+}
+
+/* TIMER */
+let time = 0, running = false, interval;
+
+function formatTime(t){
+  let m = Math.floor(t/60);
+  let s = t%60;
+  return m + ":" + (s<10?"0":"") + s;
+}
+
+function updateClock(){
+  document.getElementById("clock").textContent = formatTime(time);
+}
+
+function startTimer(){
+  if(running) return;
+  running = true;
+  interval = setInterval(()=>{ time++; updateClock(); },1000);
+}
+
+function pauseTimer(){
+  running = false;
+  clearInterval(interval);
+}
+
+function resetTimer(){
+  pauseTimer();
+  time = 0;
+  updateClock();
+}
+
+/* QUARTER */
+let q = 1;
+
+function changeQuarter(d){
+  q = Math.max(1, q + d);
+  document.getElementById("quarter").textContent = "Q" + q;
+}
+
+updateClock();
+</script>
+
+</body>
+</html>
