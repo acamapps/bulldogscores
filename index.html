@@ -35,10 +35,17 @@ body {
 .time-section { background: red; color: white; }
 
 /* TEXT */
-.title { font-size: 3.5vh; }
-.subtitle { font-size: 2.5vh; }
+.title { 
+  font-size: 3.5vh; 
+  font-weight: bold;
+}
 
-/* SCORE VALUES ROW */
+.subtitle { 
+  font-size: 2.5vh; 
+  font-weight: bold;
+}
+
+/* SCORE VALUES */
 .score-values {
   display: flex;
   width: 100%;
@@ -47,16 +54,20 @@ body {
 
 .score-box {
   width: 40%;
-  height: 80%;
-  border: 2px solid currentColor;
+  height: 85%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
+.label {
+  font-size: 1.3vh;
+  opacity: 0.8;
+}
+
 .value {
-  font-size: 3vh;
+  font-size: 4vh;
   font-weight: bold;
 }
 
@@ -70,27 +81,25 @@ body {
 .button-group {
   width: 40%;
   display: flex;
-  justify-content: center;
-  gap: 1vw;
 }
 
-button {
-  width: 5vw;
-  height: 60%;
-  font-size: 2vh;
+.button-group button {
+  flex: 1;                 /* KEY FIX */
+  height: 70%;
+  font-size: 2.2vh;
 }
 
 /* TOTAL */
 .total-box {
-  width: 90%;
-  height: 90%;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .total-value {
-  font-size: 6.5vh;
+  font-size: 7vh;
   font-weight: bold;
 }
 
@@ -106,7 +115,6 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid white;
   font-size: 3vh;
 }
 
@@ -115,8 +123,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid white;
-  font-size: 4.5vh;
+  font-size: 5vh;
   font-weight: bold;
 }
 
@@ -129,6 +136,7 @@ button {
 .time-buttons button {
   flex: 1;
   height: 70%;
+  font-size: 2.2vh;
 }
 
 </style>
@@ -145,11 +153,11 @@ button {
 
   <div class="row bulldogs score-values">
     <div class="score-box">
-      <div>Goals</div>
+      <div class="label">Goals</div>
       <div id="g1" class="value">0</div>
     </div>
     <div class="score-box">
-      <div>Behinds</div>
+      <div class="label">Behinds</div>
       <div id="b1" class="value">0</div>
     </div>
   </div>
@@ -176,11 +184,11 @@ button {
 
   <div class="row opposition score-values">
     <div class="score-box">
-      <div>Goals</div>
+      <div class="label">Goals</div>
       <div id="g2" class="value">0</div>
     </div>
     <div class="score-box">
-      <div>Behinds</div>
+      <div class="label">Behinds</div>
       <div id="b2" class="value">0</div>
     </div>
   </div>
@@ -214,8 +222,8 @@ button {
 
   <div class="row time-section">
     <div class="time-buttons">
-      <button onclick="changeQuarter(-1)">-Q</button>
-      <button onclick="changeQuarter(1)">+Q</button>
+      <button onclick="changeQuarter(-1)">-</button>
+      <button onclick="changeQuarter(1)">+</button>
       <button onclick="startTimer()">▶</button>
       <button onclick="pauseTimer()">⏸</button>
       <button onclick="resetTimer()">↺</button>
