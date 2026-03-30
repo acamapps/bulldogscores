@@ -4,7 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Footy Scoreboard</title>
+<title>Bulldogs Footy Scoreboard</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@700&display=swap" rel="stylesheet">
 
 <style>
 body {
@@ -38,11 +41,13 @@ body {
 .title { 
   font-size: 3.5vh; 
   font-weight: bold;
+  font-family: 'Orbitron', sans-serif;
 }
 
 .subtitle { 
   font-size: 2.5vh; 
   font-weight: bold;
+  font-family: 'Orbitron', sans-serif;
 }
 
 /* SCORE VALUES */
@@ -84,10 +89,18 @@ body {
 }
 
 .button-group button {
-  flex: 1;                 /* KEY FIX */
+  flex: 1;
   height: 70%;
   font-size: 2.2vh;
+  border: none;
 }
+
+/* BUTTON COLOURS */
+.plus { background: #C2FFA3; }
+.minus { background: #FF9999; }
+.play { background: #C2FFA3; }
+.pause { background: #FFE599; }
+.reset { background: #FF9999; }
 
 /* TOTAL */
 .total-box {
@@ -101,6 +114,21 @@ body {
 .total-value {
   font-size: 7vh;
   font-weight: bold;
+  font-family: 'Roboto', sans-serif;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 10px rgba(255, 120, 120, 0.6);
+  transition: transform 0.2s;
+}
+
+/* 🔥 PULSE ANIMATION */
+.pulse {
+  animation: pulseAnim 0.4s ease;
+}
+
+@keyframes pulseAnim {
+  0%   { transform: scale(1); text-shadow: 0 0 10px rgba(255,255,255,0.6); }
+  50%  { transform: scale(1.25); text-shadow: 0 0 25px rgba(255,255,255,1); }
+  100% { transform: scale(1); text-shadow: 0 0 10px rgba(255,255,255,0.6); }
 }
 
 /* TIME */
@@ -116,6 +144,8 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 3vh;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.08em;          
 }
 
 .clock-box {
@@ -125,6 +155,8 @@ body {
   justify-content: center;
   font-size: 5vh;
   font-weight: bold;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.08em;
 }
 
 .time-buttons {
@@ -137,6 +169,7 @@ body {
   flex: 1;
   height: 70%;
   font-size: 2.2vh;
+  border: none;
 }
 
 </style>
@@ -164,12 +197,12 @@ body {
 
   <div class="row bulldogs button-row">
     <div class="button-group">
-      <button onclick="updateScore('g1',-1)">-</button>
-      <button onclick="updateScore('g1',1)">+</button>
+      <button class="minus" onclick="updateScore('g1',-1)">-</button>
+      <button class="plus" onclick="updateScore('g1',1)">+</button>
     </div>
     <div class="button-group">
-      <button onclick="updateScore('b1',-1)">-</button>
-      <button onclick="updateScore('b1',1)">+</button>
+      <button class="minus" onclick="updateScore('b1',-1)">-</button>
+      <button class="plus" onclick="updateScore('b1',1)">+</button>
     </div>
   </div>
 
@@ -195,12 +228,12 @@ body {
 
   <div class="row opposition button-row">
     <div class="button-group">
-      <button onclick="updateScore('g2',-1)">-</button>
-      <button onclick="updateScore('g2',1)">+</button>
+      <button class="minus" onclick="updateScore('g2',-1)">-</button>
+      <button class="plus" onclick="updateScore('g2',1)">+</button>
     </div>
     <div class="button-group">
-      <button onclick="updateScore('b2',-1)">-</button>
-      <button onclick="updateScore('b2',1)">+</button>
+      <button class="minus" onclick="updateScore('b2',-1)">-</button>
+      <button class="plus" onclick="updateScore('b2',1)">+</button>
     </div>
   </div>
 
@@ -211,7 +244,7 @@ body {
   </div>
 
   <!-- Time -->
-  <div class="row time-section subtitle">Time</div>
+  <div class="row time-section subtitle">Timing</div>
 
   <div class="row time-section">
     <div class="time-row">
@@ -222,24 +255,41 @@ body {
 
   <div class="row time-section">
     <div class="time-buttons">
-      <button onclick="changeQuarter(-1)">-</button>
-      <button onclick="changeQuarter(1)">+</button>
-      <button onclick="startTimer()">▶</button>
-      <button onclick="pauseTimer()">⏸</button>
-      <button onclick="resetTimer()">↺</button>
+      <button class="minus" onclick="changeQuarter(-1)">-</button>
+      <button class="plus" onclick="changeQuarter(1)">+</button>
+      <button class="pause" onclick="pauseTimer()">⏸️</button>      
+      <button class="play" onclick="startTimer()">▶️</button>
+      <button class="reset" onclick="resetTimer()">🔄</button>
     </div>
-  </div>
-
+  <div>
 </div>
 
 <script>
 let scores = { g1:0, b1:0, g2:0, b2:0 };
 
+function triggerPulse(id) {
+  const el = document.getElementById(id);
+  el.classList.remove("pulse");
+  void el.offsetWidth; // restart animation
+  el.classList.add("pulse");
+}
+
 function updateScore(id, delta) {
   scores[id] = Math.max(0, scores[id] + delta);
   document.getElementById(id).textContent = scores[id];
-  document.getElementById("t1").textContent = scores.g1*6 + scores.b1;
-  document.getElementById("t2").textContent = scores.g2*6 + scores.b2;
+
+  const t1 = scores.g1*6 + scores.b1;
+  const t2 = scores.g2*6 + scores.b2;
+
+  document.getElementById("t1").textContent = t1;
+  document.getElementById("t2").textContent = t2;
+
+  // ✅ Only pulse the relevant total
+  if (id === "g1" || id === "b1") {
+    triggerPulse("t1");
+  } else if (id === "g2" || id === "b2") {
+    triggerPulse("t2");
+  }
 }
 
 /* TIMER */
