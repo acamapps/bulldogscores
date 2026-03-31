@@ -357,13 +357,13 @@ let holdTimeout;
 let holdInterval;
 
 function startHold(id, delta) {
-  updateScore(id, delta); // immediate tap
-
   holdTimeout = setTimeout(() => {
+    updateScore(id, delta); // only fires after short delay
+
     holdInterval = setInterval(() => {
       updateScore(id, delta);
-    }, 400); // repeat speed
-  }, 800); // delay before repeating
+    }, 400);
+  }, 150); // 👈 small delay to prevent accidental taps
 }
 
 function stopHold() {
