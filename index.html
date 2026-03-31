@@ -200,7 +200,7 @@ button:active:not(:disabled) {
 </style>
 </head>
 
-onmouse<body>
+<body>
 
 <div class="container">
 
@@ -426,7 +426,7 @@ function stopHold(id, delta) {
   clearTimeout(holdTimeout);
   clearInterval(holdInterval);
 
-  if (!holding && id !== undefined) {
+  if (!holding && id !== undefined && scores.hasOwnProperty(id)) {
     safeTap(id, () => updateScore(id, delta));
   }
 }
