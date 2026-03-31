@@ -368,7 +368,7 @@ function startHold(id, delta) {
     holdInterval = setInterval(() => {
       updateScore(id, delta);
     }, 400);
-  }, 100); // 👈 small delay to prevent accidental taps
+  }, 75); // 👈 small delay to prevent accidental taps
 }
 
 function stopHold() {
