@@ -98,7 +98,7 @@ button:not(:has(svg)) {
   font-size: 3vh;
   font-weight: bold;
 }
-  
+
 /* SVG ICONS */
 button svg {
   width: 60%;
@@ -192,7 +192,7 @@ button:active:not(:disabled) {
 </style>
 </head>
 
-<body>
+onmouse<body>
 
 <div class="container">
 
@@ -213,28 +213,24 @@ button:active:not(:disabled) {
 
 <div class="row bulldogs button-row">
   <div class="button-group">
-    <button class="minus" 
-      onmousedown="startHold('g1',-1)"
-      onmouseup="stopHold()"
-      ontouchstart="startHold('g1',-1)"
-      ontouchend="stopHold()">-</button>
+    <button class="minus"
+      ontouchstart="startHold('g1',-1); event.preventDefault();">
+      -
+    </button>
     <button class="plus"
-      onmousedown="startHold('g1',1)"
-      onmouseup="stopHold()"
-      ontouchstart="startHold('g1',1)"
-      ontouchend="stopHold()">+</button>
+      ontouchstart="startHold('g1',1); event.preventDefault();">
+      +
+    </button>
   </div>
   <div class="button-group">
-    <button class="minus" 
-      onmousedown="startHold('b1',-1)"
-      onmouseup="stopHold()"
-      ontouchstart="startHold('b1',-1)"
-      ontouchend="stopHold()">-</button>
+    <button class="minus"
+      ontouchstart="startHold('b1',-1); event.preventDefault();">
+      -
+    </button>
     <button class="plus"
-      onmousedown="startHold('b1',1)"
-      onmouseup="stopHold()"
-      ontouchstart="startHold('b1',1)"
-      ontouchend="stopHold()">+</button>
+      ontouchstart="startHold('b1',1); event.preventDefault();">
+      +
+    </button>
   </div>
 </div>
 
@@ -259,28 +255,24 @@ button:active:not(:disabled) {
 
 <div class="row opposition button-row">
   <div class="button-group">
-    <button class="minus" 
-      onmousedown="startHold('g2',-1)"
-      onmouseup="stopHold()"
-      ontouchstart="startHold('g2',-1)"
-      ontouchend="stopHold()">-</button>
+    <button class="minus"
+      ontouchstart="startHold('g2',-1); event.preventDefault();">
+      -
+    </button>
     <button class="plus"
-      onmousedown="startHold('g2',1)"
-      onmouseup="stopHold()"
-      ontouchstart="startHold('g2',1)"
-      ontouchend="stopHold()">+</button>
+      ontouchstart="startHold('g2',1); event.preventDefault();">
+      +
+    </button>
   </div>
   <div class="button-group">
-    <button class="minus" 
-      onmousedown="startHold('b2',-1)"
-      onmouseup="stopHold()"
-      ontouchstart="startHold('b2',-1)"
-      ontouchend="stopHold()">-</button>
+    <button class="minus"
+      ontouchstart="startHold('b2',-1); event.preventDefault();">
+      -
+    </button>
     <button class="plus"
-      onmousedown="startHold('b2',1)"
-      onmouseup="stopHold()"
-      ontouchstart="startHold('b2',1)"
-      ontouchend="stopHold()">+</button>
+      ontouchstart="startHold('b2',1); event.preventDefault();">
+      +
+    </button>
   </div>
 </div>
 
@@ -362,13 +354,15 @@ let holdTimeout;
 let holdInterval;
 
 function startHold(id, delta) {
+  stopHold(); // 👈 kill any previous hold FIRST
+
   holdTimeout = setTimeout(() => {
-    updateScore(id, delta); // only fires after short delay
+    updateScore(id, delta);
 
     holdInterval = setInterval(() => {
       updateScore(id, delta);
     }, 400);
-  }, 75); // 👈 small delay to prevent accidental taps
+  }, 75);
 }
 
 function stopHold() {
@@ -417,6 +411,10 @@ function updateQuarterButtons(){
   document.getElementById("qMinus").disabled = (q === 1);
   document.getElementById("qPlus").disabled = (q === 4);
 }
+
+document.addEventListener("touchend", stopHold);
+document.addEventListener("touchcancel", stopHold);
+document.addEventListener("mouseup", stopHold);
 
 updateClock();
 updateQuarterButtons();
