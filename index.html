@@ -7,10 +7,13 @@
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#000000">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="apple-mobile-web-app-title" content="Scores Times">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bulldogs Scoring & Timing">
 <meta name="theme-color" content="#000000">
 <link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 
 <title>Bulldogs Scoring & Timing</title>
 
@@ -21,6 +24,10 @@ body {
   margin: 0;
   background: black;
   font-family: Arial, sans-serif;
+  -webkit-user-select: none;   /* iOS Safari */
+  -ms-user-select: none;       /* old Edge */
+  user-select: none;           /* modern browsers */
+  -webkit-touch-callout: none; /* disables long-press menu on iOS */
 }
 
 .container {
