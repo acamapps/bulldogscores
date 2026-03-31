@@ -469,9 +469,6 @@ function loadTimer() {
   running = false; // always resume in paused state safely
 }
 
-document.addEventListener("touchend", stopHold);
-document.addEventListener("touchcancel", stopHold);
-document.addEventListener("mouseup", stopHold);
 
 updateClock();
 updateQuarterButtons();
