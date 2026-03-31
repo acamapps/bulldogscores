@@ -353,8 +353,9 @@ function updateScore(id, delta) {
 let holdTimeout;
 let holdInterval;
 
-function startHold(id, delta) {
-  stopHold(); // 👈 kill any previous hold FIRST
+function startHold(id, delta)
+{
+  stopHold();
 
   holdTimeout = setTimeout(() => {
     updateScore(id, delta);
