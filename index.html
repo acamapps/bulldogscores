@@ -9,6 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="Scores Times">
+<meta name="theme-color" content="#000000">
 <link rel="apple-touch-icon" href="icon-192.png">
 
 <title>Bulldogs Scoring & Timing</title>
@@ -345,14 +346,21 @@ function updateScore(id, delta) {
 
 }
 
+let holdTimeout;
 let holdInterval;
 
 function startHold(id, delta) {
-  updateScore(id, delta);
-  holdInterval = setInterval(() => updateScore(id, delta), 500);
+  updateScore(id, delta); // immediate tap
+
+  holdTimeout = setTimeout(() => {
+    holdInterval = setInterval(() => {
+      updateScore(id, delta);
+    }, 400); // repeat speed
+  }, 800); // delay before repeating
 }
 
 function stopHold() {
+  clearTimeout(holdTimeout);
   clearInterval(holdInterval);
 }
 
