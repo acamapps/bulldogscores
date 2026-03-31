@@ -94,9 +94,17 @@ button {
   touch-action: manipulation;
 }
 
-button:not(:has(svg)) {
+button {
   font-size: 3vh;
   font-weight: bold;
+}
+
+button svg {
+  width: 60%;
+  height: 60%;
+  fill: currentColor;
+  display: block;
+  margin: auto;
 }
 
 /* SVG ICONS */
@@ -214,21 +222,36 @@ onmouse<body>
 <div class="row bulldogs button-row">
   <div class="button-group">
     <button class="minus"
-      ontouchstart="startHold('g1',-1); event.preventDefault();">
+      onpointerdown="startHold('g1',-1)"
+      onpointerup="stopHold('g1',-1)"
+      onpointercancel="stopHold()"
+      onpointerleave="stopHold()">
       -
     </button>
+
     <button class="plus"
-      ontouchstart="startHold('g1',1); event.preventDefault();">
+      onpointerdown="startHold('g1',1)"
+      onpointerup="stopHold('g1',1)"
+      onpointercancel="stopHold()"
+      onpointerleave="stopHold()">
       +
     </button>
   </div>
+
   <div class="button-group">
     <button class="minus"
-      ontouchstart="startHold('b1',-1); event.preventDefault();">
+      onpointerdown="startHold('b1',-1)"
+      onpointerup="stopHold('b1',-1)"
+      onpointercancel="stopHold()"
+      onpointerleave="stopHold()">
       -
     </button>
+
     <button class="plus"
-      ontouchstart="startHold('b1',1); event.preventDefault();">
+      onpointerdown="startHold('b1,1)"
+      onpointerup="stopHold('b1',1)"
+      onpointercancel="stopHold()"
+      onpointerleave="stopHold()">
       +
     </button>
   </div>
@@ -256,21 +279,36 @@ onmouse<body>
 <div class="row opposition button-row">
   <div class="button-group">
     <button class="minus"
-      ontouchstart="startHold('g2',-1); event.preventDefault();">
+      onpointerdown="startHold('g2',-1)"
+      onpointerup="stopHold('g2',-1)"
+      onpointercancel="stopHold()"
+      onpointerleave="stopHold()">
       -
     </button>
+
     <button class="plus"
-      ontouchstart="startHold('g2',1); event.preventDefault();">
+      onpointerdown="startHold('g2',1)"
+      onpointerup="stopHold('g2',1)"
+      onpointercancel="stopHold()"
+      onpointerleave="stopHold()">
       +
     </button>
   </div>
+
   <div class="button-group">
     <button class="minus"
-      ontouchstart="startHold('b2',-1); event.preventDefault();">
+      onpointerdown="startHold('b2',-1)"
+      onpointerup="stopHold('b2',-1)"
+      onpointercancel="stopHold()"
+      onpointerleave="stopHold()">
       -
     </button>
+
     <button class="plus"
-      ontouchstart="startHold('b2',1); event.preventDefault();">
+      onpointerdown="startHold('b2',1)"
+      onpointerup="stopHold('b2',1)"
+      onpointercancel="stopHold()"
+      onpointerleave="stopHold()">
       +
     </button>
   </div>
@@ -320,6 +358,10 @@ onmouse<body>
 </div>
 
 <script>
+
+document.addEventListener("pointerup", stopHold);
+document.addEventListener("touchend", stopHold);
+
 let scores = { g1:0, b1:0, g2:0, b2:0 };
 
 function triggerPulse(id) {
@@ -327,6 +369,19 @@ function triggerPulse(id) {
   el.classList.remove("pulse");
   void el.offsetWidth;
   el.classList.add("pulse");
+}
+
+const locks = {};
+
+function safeTap(id, action, delay = 200) {
+  if (locks[id]) return;
+
+  locks[id] = true;
+  action();
+
+  setTimeout(() => {
+    locks[id] = false;
+  }, delay);
 }
 
 function vibrate() {
@@ -352,25 +407,34 @@ function updateScore(id, delta) {
 
 let holdTimeout;
 let holdInterval;
+let holding = false;
 
 function startHold(id, delta) {
-  stopHold(); // 👈 kill any previous hold FIRST
+  stopHold();
+  holding = false;
 
   holdTimeout = setTimeout(() => {
-    updateScore(id, delta);
+    holding = true;
 
     holdInterval = setInterval(() => {
       updateScore(id, delta);
-    }, 400);
-  }, 75);
+    }, 200); // faster repeat but controlled
+  }, 350); // <-- MUCH better delay
 }
 
-function stopHold() {
+function stopHold(id, delta) {
   clearTimeout(holdTimeout);
   clearInterval(holdInterval);
+
+  if (!holding && id !== undefined) {
+    safeTap(id, () => updateScore(id, delta));
+  }
 }
 
-let time = 0, running = false, interval;
+let startTime = null;
+let pausedAt = null;
+let pausedTotal = 0;
+let running = false;
 
 function formatTime(t){
   let m = Math.floor(t/60);
@@ -378,25 +442,57 @@ function formatTime(t){
   return m + ":" + (s<10?"0":"") + s;
 }
 
-function updateClock(){
-  document.getElementById("clock").textContent = formatTime(time);
+function updateClock() {
+  if (!startTime) {
+    document.getElementById("clock").textContent = "0:00";
+    return;
+  }
+
+  let end = running ? Date.now() : (pausedAt || Date.now());
+
+  let elapsed = end - startTime - pausedTotal;
+  let seconds = Math.floor(elapsed / 1000);
+
+  let m = Math.floor(seconds / 60);
+  let s = seconds % 60;
+
+  document.getElementById("clock").textContent =
+    m + ":" + (s < 10 ? "0" : "") + s;
 }
 
-function startTimer(){
-  if(running) return;
+function startTimer() {
+  if (running) return;
+
+  const now = Date.now();
+
+  if (!startTime) {
+    startTime = now;
+  } else if (pausedAt) {
+    pausedTotal += now - pausedAt;
+    pausedAt = null;
+  }
+
   running = true;
-  interval = setInterval(()=>{ time++; updateClock(); },1000);
+  saveTimer();
 }
 
-function pauseTimer(){
+function pauseTimer() {
+  if (!running) return;
+
+  pausedAt = Date.now();
   running = false;
-  clearInterval(interval);
+  saveTimer();
 }
 
-function resetTimer(){
-  pauseTimer();
-  time = 0;
-  updateClock();
+function resetTimer() {
+  startTime = null;
+  pausedAt = null;
+  pausedTotal = 0;
+  running = false;
+
+  document.getElementById("clock").textContent = "0:00";
+
+  saveTimer();
 }
 
 let q = 1;
@@ -412,12 +508,35 @@ function updateQuarterButtons(){
   document.getElementById("qPlus").disabled = (q === 4);
 }
 
-document.addEventListener("touchend", stopHold);
-document.addEventListener("touchcancel", stopHold);
-document.addEventListener("mouseup", stopHold);
+function saveTimer() {
+  localStorage.setItem("timer", JSON.stringify({
+    startTime,
+    pausedAt,
+    pausedTotal,
+    running
+  }));
+}
+
+function loadTimer() {
+  let data = localStorage.getItem("timer");
+  if (!data) return;
+
+  let t = JSON.parse(data);
+
+  startTime = t.startTime;
+  pausedAt = t.pausedAt;
+  pausedTotal = t.pausedTotal;
+  running = false; // always resume in paused state safely
+}
+
 
 updateClock();
 updateQuarterButtons();
+
+loadTimer();
+updateClock();
+setInterval(updateClock, 250);
+
 </script>
 
 </body>
