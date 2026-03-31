@@ -353,9 +353,8 @@ function updateScore(id, delta) {
 let holdTimeout;
 let holdInterval;
 
-function startHold(id, delta)
-{
-  stopHold();
+function startHold(id, delta) {
+  stopHold(); // 👈 kill any previous hold FIRST
 
   holdTimeout = setTimeout(() => {
     updateScore(id, delta);
@@ -371,10 +370,7 @@ function stopHold() {
   clearInterval(holdInterval);
 }
 
-let startTime = null;
-let pausedAt = null;
-let pausedTotal = 0;
-let running = false;
+let time = 0, running = false, interval;
 
 function formatTime(t){
   let m = Math.floor(t/60);
@@ -382,57 +378,25 @@ function formatTime(t){
   return m + ":" + (s<10?"0":"") + s;
 }
 
-function updateClock() {
-  if (!startTime) {
-    document.getElementById("clock").textContent = "0:00";
-    return;
-  }
-
-  let end = running ? Date.now() : (pausedAt || Date.now());
-
-  let elapsed = end - startTime - pausedTotal;
-  let seconds = Math.floor(elapsed / 1000);
-
-  let m = Math.floor(seconds / 60);
-  let s = seconds % 60;
-
-  document.getElementById("clock").textContent =
-    m + ":" + (s < 10 ? "0" : "") + s;
+function updateClock(){
+  document.getElementById("clock").textContent = formatTime(time);
 }
 
-function startTimer() {
-  if (running) return;
-
-  const now = Date.now();
-
-  if (!startTime) {
-    startTime = now;
-  } else if (pausedAt) {
-    pausedTotal += now - pausedAt;
-    pausedAt = null;
-  }
-
+function startTimer(){
+  if(running) return;
   running = true;
-  saveTimer();
+  interval = setInterval(()=>{ time++; updateClock(); },1000);
 }
 
-function pauseTimer() {
-  if (!running) return;
-
-  pausedAt = Date.now();
+function pauseTimer(){
   running = false;
-  saveTimer();
+  clearInterval(interval);
 }
 
-function resetTimer() {
-  startTime = null;
-  pausedAt = null;
-  pausedTotal = 0;
-  running = false;
-
-  document.getElementById("clock").textContent = "0:00";
-
-  saveTimer();
+function resetTimer(){
+  pauseTimer();
+  time = 0;
+  updateClock();
 }
 
 let q = 1;
@@ -448,35 +412,12 @@ function updateQuarterButtons(){
   document.getElementById("qPlus").disabled = (q === 4);
 }
 
-function saveTimer() {
-  localStorage.setItem("timer", JSON.stringify({
-    startTime,
-    pausedAt,
-    pausedTotal,
-    running
-  }));
-}
-
-function loadTimer() {
-  let data = localStorage.getItem("timer");
-  if (!data) return;
-
-  let t = JSON.parse(data);
-
-  startTime = t.startTime;
-  pausedAt = t.pausedAt;
-  pausedTotal = t.pausedTotal;
-  running = false; // always resume in paused state safely
-}
-
+document.addEventListener("touchend", stopHold);
+document.addEventListener("touchcancel", stopHold);
+document.addEventListener("mouseup", stopHold);
 
 updateClock();
 updateQuarterButtons();
-
-loadTimer();
-updateClock();
-setInterval(updateClock, 250);
-
 </script>
 
 </body>
