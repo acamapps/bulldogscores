@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
 <title>Bulldogs Scoring & Timing</title>
 
@@ -75,6 +75,8 @@ button {
   flex: 1;
   border: none;
   border-radius: 0.8vh;
+  min-height: 6vh;
+  touch-action: manipulation;
 }
 
 /* SVG ICONS */
@@ -113,7 +115,8 @@ button:disabled {
 
 /* PRESS */
 button:active:not(:disabled) {
-  transform: scale(0.95);
+  transform: scale(0.9);
+  filter: brightness(0.9);
 }
 
 /* TOTAL */
@@ -190,12 +193,28 @@ button:active:not(:disabled) {
 
 <div class="row bulldogs button-row">
   <div class="button-group">
-    <button class="minus" onclick="updateScore('g1',-1)">-</button>
-    <button class="plus" onclick="updateScore('g1',1)">+</button>
+    <button class="minus" 
+      onmousedown="startHold('g1',-1)"
+      onmouseup="stopHold()"
+      ontouchstart="startHold('g1',-1)"
+      ontouchend="stopHold()">-</button>
+    <button class="plus"
+      onmousedown="startHold('g1',1)"
+      onmouseup="stopHold()"
+      ontouchstart="startHold('g1',1)"
+      ontouchend="stopHold()">+</button>
   </div>
   <div class="button-group">
-    <button class="minus" onclick="updateScore('b1',-1)">-</button>
-    <button class="plus" onclick="updateScore('b1',1)">+</button>
+    <button class="minus" 
+      onmousedown="startHold('b1',-1)"
+      onmouseup="stopHold()"
+      ontouchstart="startHold('b1',-1)"
+      ontouchend="stopHold()">-</button>
+    <button class="plus"
+      onmousedown="startHold('b1',1)"
+      onmouseup="stopHold()"
+      ontouchstart="startHold('b1',1)"
+      ontouchend="stopHold()">+</button>
   </div>
 </div>
 
@@ -220,12 +239,28 @@ button:active:not(:disabled) {
 
 <div class="row opposition button-row">
   <div class="button-group">
-    <button class="minus" onclick="updateScore('g2',-1)">-</button>
-    <button class="plus" onclick="updateScore('g2',1)">+</button>
+    <button class="minus" 
+      onmousedown="startHold('g2',-1)"
+      onmouseup="stopHold()"
+      ontouchstart="startHold('g2',-1)"
+      ontouchend="stopHold()">-</button>
+    <button class="plus"
+      onmousedown="startHold('g2',1)"
+      onmouseup="stopHold()"
+      ontouchstart="startHold('g2',1)"
+      ontouchend="stopHold()">+</button>
   </div>
   <div class="button-group">
-    <button class="minus" onclick="updateScore('b2',-1)">-</button>
-    <button class="plus" onclick="updateScore('b2',1)">+</button>
+    <button class="minus" 
+      onmousedown="startHold('b2',-1)"
+      onmouseup="stopHold()"
+      ontouchstart="startHold('b2',-1)"
+      ontouchend="stopHold()">-</button>
+    <button class="plus"
+      onmousedown="startHold('b2',1)"
+      onmouseup="stopHold()"
+      ontouchstart="startHold('b2',1)"
+      ontouchend="stopHold()">+</button>
   </div>
 </div>
 
@@ -282,6 +317,10 @@ function triggerPulse(id) {
   el.classList.add("pulse");
 }
 
+function vibrate() {
+  if (navigator.vibrate) navigator.vibrate(10);
+}
+
 function updateScore(id, delta) {
   scores[id] = Math.max(0, scores[id] + delta);
   document.getElementById(id).textContent = scores[id];
@@ -289,12 +328,25 @@ function updateScore(id, delta) {
   document.getElementById("t1").textContent = scores.g1*6 + scores.b1;
   document.getElementById("t2").textContent = scores.g2*6 + scores.b2;
 
+  vibrate();
+
   if (id === "g1" || id === "b1") {
     triggerPulse("t1");
   } else if (id === "g2" || id === "b2") {
     triggerPulse("t2");
   }
 
+}
+
+let holdInterval;
+
+function startHold(id, delta) {
+  updateScore(id, delta);
+  holdInterval = setInterval(() => updateScore(id, delta), 200);
+}
+
+function stopHold() {
+  clearInterval(holdInterval);
 }
 
 let time = 0, running = false, interval;
