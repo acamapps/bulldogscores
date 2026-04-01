@@ -6,8 +6,8 @@ const FILES_TO_CACHE = [
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png",
-  "./fonts/Orbitron-bold.woff2",
-  "./fonts/Roboto-bold.woff2"
+  "./fonts/Orbitron-Bold.woff2",
+  "./fonts/Roboto-Bold.woff2"
 ];
 
 // Install → cache core files
