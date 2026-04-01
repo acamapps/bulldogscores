@@ -1,11 +1,13 @@
-const CACHE_NAME = "bulldogscores-v1";
+const CACHE_NAME = "bulldogscores-v2";
 
 const FILES_TO_CACHE = [
   "./",
   "./index.html",
   "./manifest.json",
   "./icon-192.png",
-  "./icon-512.png"
+  "./icon-512.png",
+  "./fonts/orbitron-bold.woff2",
+  "./fonts/roboto-bold.woff2"
 ];
 
 // Install → cache core files
