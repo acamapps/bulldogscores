@@ -1,220 +1,126 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BW3QPXB7QC"></script>
-<script>
-  window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-BW3QPXB7QC');
-</script>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-<link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#000000">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Bulldogs Scoring & Timing">
-<meta name="theme-color" content="#000000">
-<link rel="apple-touch-icon" href="icon-192.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-
-<title>Bulldogs Scoring & Timing</title>
+<title>Timer’s Aide</title>
 
 <style>
 @font-face {
   font-family: 'Orbitron';
-  src: url('./fonts/Orbitron-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
+  src: url('fonts/Orbitron-Bold.woff2');
 }
-
 @font-face {
   font-family: 'Roboto';
-  src: url('./fonts/Roboto-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
+  src: url('fonts/Roboto-Bold.woff2');
 }
 
 body {
   margin: 0;
   background: black;
-  font-family: Arial, sans-serif;
-  -webkit-user-select: none;   /* iOS Safari */
-  -ms-user-select: none;       /* old Edge */
-  user-select: none;           /* modern browsers */
-  -webkit-touch-callout: none; /* disables long-press menu on iOS */
+  font-family: 'Roboto';
+  user-select: none;
 }
 
+/* CONTAINER */
 .container {
-  width: 90vw;
+  width: 95vw;
   height: 100vh;
   margin: auto;
   display: flex;
   flex-direction: column;
 }
 
+/* ROWS */
 .row {
-  height: 8vh;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
 }
 
-/* COLOURS */
-.header { background: #1e1e1e; color: white; }
-.bulldogs { background: #0b3d91; color: white; }
-.opposition { background: white; color: black; }
-.time-section { background: red; color: white; }
+/* HEIGHT SYSTEM */
+.header { height: 8vh; background: black; color: white; }
+.game-title { height: 6vh; background: #0b4dbf; color: white; }
+.quarters { height: 8vh; background: #0b4dbf; }
+.game-timer { height: 18vh; background: #0b4dbf; }
+.game-controls { height: 10vh; background: #0b4dbf; }
+
+.intermission-title { height: 6vh; background: white; }
+.intermission-timer { height: 14vh; background: white; }
+.intermission-controls { height: 10vh; background: white; }
+
+.sirens-title { height: 6vh; background: red; color: white; }
+.sirens-controls { height: 8vh; background: red; }
+
+.footer { height: 6vh; background: black; color: grey; }
 
 /* TEXT */
-.title { font-size: 5vh; font-family: 'Orbitron'; }
-.subtitle { font-size: 3.5vh; font-family: 'Orbitron'; }
-
-/* SCORES */
-.score-values {
-  display: flex;
-  width: 100%;
-  justify-content: space-around;
+h1, h2 {
+  font-family: 'Orbitron';
+  margin: 0;
 }
 
-.score-box {
-  width: 40%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+h1 { font-size: 4vh; }
+h2 { font-size: 3vh; }
+
+/* TIMERS */
+.timer {
+  font-family: 'Orbitron';
+  color: #00ff00;
+  font-size: 10vh;
 }
 
-.label { font-size: 1.6vh; }
-.value { font-size: 5.5vh; }
+.small-timer {
+  font-size: 6vh;
+}
 
-/* BUTTONS */
+/* BUTTON ROWS */
 .button-row {
   display: flex;
+  justify-content: center;   /* centres buttons */
+  align-items: center;
+  gap: 1vh;
   width: 100%;
-  justify-content: space-around;
 }
 
-.button-group {
-  width: 40%;
-  display: flex;
-}
-
-button {
+/* BUTTONS */
+button, select {
   flex: 1;
+  max-width: 12vh;
   border: none;
-  border-radius: 0.8vh;
-  min-height: 6vh;
-  touch-action: manipulation;
+  border-radius: 1vh;
+  min-height: 4vh;
+  font-size: 3vh;
+  text-align: center;
+  background: #b1b1b1;
 }
 
 button {
-  font-size: 3vh;
-  font-weight: bold;
-}
-
-button svg {
-  width: 60%;
-  height: 60%;
-  fill: currentColor;
-  display: block;
-  margin: auto;
-}
-
-/* SVG ICONS */
-button svg {
-  width: 60%;
-  height: 60%;
-  fill: currentColor;
-  display: block;
-  margin: auto;
-}
-
-/* TIME BUTTONS */
-.time-buttons {
-  width: 100%;
-  display: flex;
-  height: 100%;
-}
-
-.time-buttons button {
-  height: 70%;
-}
-
-/* COLOURS */
-.plus { background: #C2FFA3; }
-.minus { background: #FF9999; }
-.play { background: #C2FFA3; }
-.pause { background: #FFE599; }
-.reset { background: #FF9999; }
-
-/* DISABLED */
-button:disabled {
-  background: #cccccc !important;
-  color: #666;
-  cursor: not-allowed;
-}
-
-/* PRESS */
-button:active:not(:disabled) {
-  transform: scale(0.9);
-  filter: brightness(0.9);
-}
-
-/* TOTAL */
-.total-box {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.total-value {
-  font-size: 7vh;
-  font-weight: bold;
-  font-family: 'Roboto', sans-serif;
-  letter-spacing: 0.08em;
-  text-shadow: 0 0 10px rgba(255, 120, 120, 0.6);
-  transition: transform 0.2s;
+/* ACTIVE QUARTER */
+button.active {
+  border: 0.4vh solid #00ff00;
+  color: #00ff00;
 }
 
-/* PULSE */
-.pulse {
-  animation: pulseAnim 0.4s ease;
-}
-
-@keyframes pulseAnim {
-  0%   { transform: scale(1); text-shadow: 0 0 10px rgba(255,255,255,0.6); }
-  50%  { transform: scale(1.25); text-shadow: 0 0 25px rgba(255,255,255,1); }
-  100% { transform: scale(1); text-shadow: 0 0 10px rgba(255,255,255,0.6); }
-}
-
-/* TIME */
-.time-row {
-  width: 100%;
-  display: flex;
-}
-
-.quarter-box {
+/* SVG */
+button svg {
   width: 40%;
-  font-size: 3.8vh;
-  font-family: 'Orbitron';
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 40%;
+  fill: currentColor;
 }
 
-.clock-box {
-  width: 60%;
-  font-size: 6.5vh;
-  font-family: 'Orbitron';
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* LINKS */
+a {
+  color: rgb(66, 160, 186);
+  font-size: 2vh;
 }
 </style>
 </head>
@@ -223,154 +129,85 @@ button:active:not(:disabled) {
 
 <div class="container">
 
-<div class="row header title">Footy Scores</div>
+<!-- HEADER -->
+<div class="row header">
+  <h1>Footy Timer</h1>
+</div>
 
-<div class="row bulldogs subtitle">Bulldogs</div>
+<!-- GAME -->
+<div class="row game-title"><h2>Game Time</h2></div>
 
-<div class="row bulldogs score-values">
-  <div class="score-box">
-    <div class="label">Goals</div>
-    <div id="g1" class="value">0</div>
-  </div>
-  <div class="score-box">
-    <div class="label">Behinds</div>
-    <div id="b1" class="value">0</div>
+<div class="row quarters">
+  <div class="button-row">
+    <button onclick="selectQuarter(this)">Q1</button>
+    <button onclick="selectQuarter(this)">Q2</button>
+    <button onclick="selectQuarter(this)">Q3</button>
+    <button onclick="selectQuarter(this)">Q4</button>
   </div>
 </div>
 
-<div class="row bulldogs button-row">
-  <div class="button-group">
-    <button class="minus"
-      onpointerdown="startHold('g1',-1)"
-      onpointerup="stopHold('g1',-1)"
-      onpointercancel="stopHold()"
-      onpointerleave="stopHold()">
-      -
-    </button>
-
-    <button class="plus"
-      onpointerdown="startHold('g1',1)"
-      onpointerup="stopHold('g1',1)"
-      onpointercancel="stopHold()"
-      onpointerleave="stopHold()">
-      +
-    </button>
-  </div>
-
-  <div class="button-group">
-    <button class="minus"
-      onpointerdown="startHold('b1',-1)"
-      onpointerup="stopHold('b1',-1)"
-      onpointercancel="stopHold()"
-      onpointerleave="stopHold()">
-      -
-    </button>
-
-    <button class="plus"
-      onpointerdown="startHold('b1',1)"
-      onpointerup="stopHold('b1',1)"
-      onpointercancel="stopHold()"
-      onpointerleave="stopHold()">
-      +
-    </button>
-  </div>
+<div class="row game-timer">
+  <div id="gameTimer" class="timer">00:00</div>
 </div>
 
-<div class="row bulldogs">
-  <div class="total-box">
-    <div id="t1" class="total-value">0</div>
-  </div>
-</div>
+<div class="row game-controls">
+  <div class="button-row">
+    <button onclick="toggleDirection()" id="directionBtn">⬆️</button>
+    <select id="minutesSelect"></select>
 
-<div class="row opposition subtitle">Opposition</div>
-
-<div class="row opposition score-values">
-  <div class="score-box">
-    <div class="label">Goals</div>
-    <div id="g2" class="value">0</div>
-  </div>
-  <div class="score-box">
-    <div class="label">Behinds</div>
-    <div id="b2" class="value">0</div>
-  </div>
-</div>
-
-<div class="row opposition button-row">
-  <div class="button-group">
-    <button class="minus"
-      onpointerdown="startHold('g2',-1)"
-      onpointerup="stopHold('g2',-1)"
-      onpointercancel="stopHold()"
-      onpointerleave="stopHold()">
-      -
+    <button onclick="resetGame()">
+      <svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12"/></svg>
     </button>
 
-    <button class="plus"
-      onpointerdown="startHold('g2',1)"
-      onpointerup="stopHold('g2',1)"
-      onpointercancel="stopHold()"
-      onpointerleave="stopHold()">
-      +
-    </button>
-  </div>
-
-  <div class="button-group">
-    <button class="minus"
-      onpointerdown="startHold('b2',-1)"
-      onpointerup="stopHold('b2',-1)"
-      onpointercancel="stopHold()"
-      onpointerleave="stopHold()">
-      -
+    <button onclick="startGame()">
+      <svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg>
     </button>
 
-    <button class="plus"
-      onpointerdown="startHold('b2',1)"
-      onpointerup="stopHold('b2',1)"
-      onpointercancel="stopHold()"
-      onpointerleave="stopHold()">
-      +
-    </button>
-  </div>
-</div>
-
-<div class="row opposition">
-  <div class="total-box">
-    <div id="t2" class="total-value">0</div>
-  </div>
-</div>
-
-<div class="row time-section subtitle">Timing</div>
-
-<div class="row time-section">
-  <div class="time-row">
-    <div id="quarter" class="quarter-box">Q1</div>
-    <div id="clock" class="clock-box">0:00</div>
-  </div>
-</div>
-
-<div class="row time-section">
-  <div class="time-buttons">
-    <button id="qMinus" class="minus" onclick="changeQuarter(-1)">-</button>
-    <button id="qPlus" class="plus" onclick="changeQuarter(1)">+</button>
-
-    <button class="pause" onclick="pauseTimer()">
+    <button onclick="pauseGame()">
       <svg viewBox="0 0 24 24">
         <rect x="6" y="5" width="4" height="14"/>
         <rect x="14" y="5" width="4" height="14"/>
       </svg>
     </button>
+  </div>
+</div>
 
-    <button class="play" onclick="startTimer()">
-      <svg viewBox="0 0 24 24">
-        <polygon points="8,5 19,12 8,19"/>
-      </svg>
+<!-- INTERMISSION -->
+<div class="row intermission-title"><h2>Intermissions</h2></div>
+
+<div class="row intermission-timer">
+  <div id="intermissionTimer" class="timer small-timer">00:00</div>
+</div>
+
+<div class="row intermission-controls">
+  <div class="button-row">
+    <select id="intermissionSelect"></select>
+
+    <button onclick="resetIntermission()">
+      <svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12"/></svg>
     </button>
 
-    <button class="reset" onclick="resetTimer()">
-      <svg viewBox="0 0 24 24">
-        <rect x="6" y="6" width="12" height="12"/>
-      </svg>
+    <button onclick="startIntermission()">
+      <svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg>
     </button>
+  </div>
+</div>
+
+<!-- SIRENS -->
+<div class="row sirens-title"><h2>Sirens</h2></div>
+
+<div class="row sirens-controls">
+  <div class="button-row">
+    <button onclick="playSiren('siren.mp3')">Full</button>
+    <button onclick="playSiren('twomin.mp3')">2-min</button>
+    <button onclick="playSiren('onemin.mp3')">1-min</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="row footer">
+  <div>
+    <a href="instructions.html">instructions</a> | acamapps v1.0
   </div>
 </div>
 
@@ -378,190 +215,135 @@ button:active:not(:disabled) {
 
 <script>
 
-document.addEventListener("pointerup", stopHold);
-document.addEventListener("touchend", stopHold);
-
-let scores = { g1:0, b1:0, g2:0, b2:0 };
-
-function triggerPulse(id) {
-  const el = document.getElementById(id);
-  el.classList.remove("pulse");
-  void el.offsetWidth;
-  el.classList.add("pulse");
+/* DROPDOWNS */
+for (let i=0;i<=30;i++){
+  let o=document.createElement("option");
+  o.value=i;o.textContent=i;
+  minutesSelect.appendChild(o);
+}
+for (let i=0;i<=20;i++){
+  let o=document.createElement("option");
+  o.value=i;o.textContent=i;
+  intermissionSelect.appendChild(o);
 }
 
-const locks = {};
-
-function safeTap(id, action, delay = 200) {
-  if (locks[id]) return;
-
-  locks[id] = true;
-  action();
-
-  setTimeout(() => {
-    locks[id] = false;
-  }, delay);
+/* AUDIO */
+function playSiren(file){
+  new Audio("sirens/"+file).play();
 }
 
-function vibrate() {
-  if (navigator.vibrate) navigator.vibrate(10);
+/* GAME TIMER */
+let gameSeconds=0, gameInterval=null, countUp=true;
+
+function updateGame(){
+  let m=Math.floor(gameSeconds/60);
+  let s=gameSeconds%60;
+  gameTimer.textContent =
+    String(m).padStart(2,'0')+":"+String(s).padStart(2,'0');
 }
 
-function updateScore(id, delta) {
-  scores[id] = Math.max(0, scores[id] + delta);
-  document.getElementById(id).textContent = scores[id];
+function startGame(){
+  if(gameInterval) return;
 
-  document.getElementById("t1").textContent = scores.g1*6 + scores.b1;
-  document.getElementById("t2").textContent = scores.g2*6 + scores.b2;
+  playSiren("siren.mp3");
 
-  vibrate();
+  gameInterval=setInterval(()=>{
+    gameSeconds+=countUp?1:-1;
 
-  if (id === "g1" || id === "b1") {
-    triggerPulse("t1");
-  } else if (id === "g2" || id === "b2") {
-    triggerPulse("t2");
-  }
+    if(!countUp && gameSeconds<=0){
+      gameSeconds=0;
+      updateGame();
+      clearInterval(gameInterval);
+      gameInterval=null;
 
+      playSiren("siren.mp3");
+
+      resetIntermission();
+      startIntermission();
+      return;
+    }
+
+    updateGame();
+  },1000);
 }
 
-let holdTimeout;
-let holdInterval;
-let holding = false;
-
-function startHold(id, delta) {
-  stopHold();
-  holding = false;
-
-  holdTimeout = setTimeout(() => {
-    holding = true;
-
-    holdInterval = setInterval(() => {
-      updateScore(id, delta);
-    }, 200); // faster repeat but controlled
-  }, 350); // <-- MUCH better delay
+function pauseGame(){
+  clearInterval(gameInterval);
+  gameInterval=null;
 }
 
-function stopHold(id, delta) {
-  clearTimeout(holdTimeout);
-  clearInterval(holdInterval);
-
-  if (!holding && id !== undefined && scores.hasOwnProperty(id)) {
-    safeTap(id, () => updateScore(id, delta));
-  }
+function resetGame(){
+  clearInterval(gameInterval);
+  gameInterval=null;
+  gameSeconds=parseInt(minutesSelect.value || 0)*60;
+  updateGame();
 }
 
-let startTime = null;
-let pausedAt = null;
-let pausedTotal = 0;
-let running = false;
-
-function formatTime(t){
-  let m = Math.floor(t/60);
-  let s = t%60;
-  return m + ":" + (s<10?"0":"") + s;
+function toggleDirection(){
+  countUp=!countUp;
+  directionBtn.textContent=countUp?"⬆️":"⬇️";
 }
 
-function updateClock() {
-  if (!startTime) {
-    document.getElementById("clock").textContent = "0:00";
-    return;
-  }
+/* INTERMISSION */
+let intermissionSeconds=0, intermissionInterval=null;
+let played2=false, played1=false;
 
-  let end = running ? Date.now() : (pausedAt || Date.now());
-
-  let elapsed = end - startTime - pausedTotal;
-  let seconds = Math.floor(elapsed / 1000);
-
-  let m = Math.floor(seconds / 60);
-  let s = seconds % 60;
-
-  document.getElementById("clock").textContent =
-    m + ":" + (s < 10 ? "0" : "") + s;
+function updateIntermission(){
+  let m=Math.floor(intermissionSeconds/60);
+  let s=intermissionSeconds%60;
+  intermissionTimer.textContent =
+    String(m).padStart(2,'0')+":"+String(s).padStart(2,'0');
 }
 
-function startTimer() {
-  if (running) return;
+function startIntermission(){
+  if(intermissionInterval) return;
 
-  const now = Date.now();
+  intermissionInterval=setInterval(()=>{
+    intermissionSeconds--;
 
-  if (!startTime) {
-    startTime = now;
-  } else if (pausedAt) {
-    pausedTotal += now - pausedAt;
-    pausedAt = null;
-  }
+    if(intermissionSeconds===120 && !played2){
+      playSiren("twomin.mp3");
+      played2=true;
+    }
 
-  running = true;
-  saveTimer();
+    if(intermissionSeconds===60 && !played1){
+      playSiren("onemin.mp3");
+      played1=true;
+    }
+
+    if(intermissionSeconds<=0){
+      intermissionSeconds=0;
+      clearInterval(intermissionInterval);
+      intermissionInterval=null;
+    }
+
+    updateIntermission();
+  },1000);
 }
 
-function pauseTimer() {
-  if (!running) return;
+function resetIntermission(){
+  clearInterval(intermissionInterval);
+  intermissionInterval=null;
 
-  pausedAt = Date.now();
-  running = false;
-  saveTimer();
+  intermissionSeconds=parseInt(intermissionSelect.value || 0)*60;
+
+  played2=false;
+  played1=false;
+
+  updateIntermission();
 }
 
-function resetTimer() {
-  startTime = null;
-  pausedAt = null;
-  pausedTotal = 0;
-  running = false;
-
-  document.getElementById("clock").textContent = "0:00";
-
-  saveTimer();
+/* QUARTERS */
+function selectQuarter(btn){
+  document.querySelectorAll(".quarters button")
+    .forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
 }
 
-let q = 1;
-
-function changeQuarter(d){
-  q = Math.max(1, Math.min(4, q + d));
-  document.getElementById("quarter").textContent = "Q" + q;
-  updateQuarterButtons();
-}
-
-function updateQuarterButtons(){
-  document.getElementById("qMinus").disabled = (q === 1);
-  document.getElementById("qPlus").disabled = (q === 4);
-}
-
-function saveTimer() {
-  localStorage.setItem("timer", JSON.stringify({
-    startTime,
-    pausedAt,
-    pausedTotal,
-    running
-  }));
-}
-
-function loadTimer() {
-  let data = localStorage.getItem("timer");
-  if (!data) return;
-
-  let t = JSON.parse(data);
-
-  startTime = t.startTime;
-  pausedAt = t.pausedAt;
-  pausedTotal = t.pausedTotal;
-  running = false; // always resume in paused state safely
-}
-
-updateClock();
-updateQuarterButtons();
-
-loadTimer();
-updateClock();
-setInterval(updateClock, 250);
-
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js")
-      .then(() => console.log("Service Worker registered"))
-      .catch(err => console.log("SW registration failed:", err));
-  });
-}
+/* INIT */
+directionBtn.textContent = "⬆️";
+updateGame();
+updateIntermission();
 
 </script>
 
