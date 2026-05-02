@@ -1,4 +1,4 @@
-const CACHE_NAME = "bulldogscores-v1.10";
+const CACHE_NAME = "bulldogscores-v1.11";
 
 const FILES_TO_CACHE = [
   "./",
