@@ -217,6 +217,19 @@ button:active:not(:disabled) {
   justify-content: center;
 }
 
+.bulldogs-logo-fixed {
+  position: fixed;
+  left: 50%;
+  top: 15vh;              /* aligns under Bulldogs row */
+  transform: translateX(-50%);
+
+  width: 10vh;
+  opacity: 0.25;
+
+  z-index: 0;
+  pointer-events: none;
+}
+
 .footer { height: 3vh; background: black; color: grey; }
 
 </style>
@@ -229,6 +242,8 @@ button:active:not(:disabled) {
 <div class="row header title">Footy Scores</div>
 
 <div class="row bulldogs subtitle">Bulldogs</div>
+
+<img src="Barossa2.png" class="bulldogs-logo-fixed">
 
 <div class="row bulldogs score-values">
   <div class="score-box">
@@ -379,7 +394,7 @@ button:active:not(:disabled) {
 
 <div class="row footer">
   <div>
-    <a href="mailto:acamapps@outlook.com">email</a> | acamapps v1.01
+    <a href="mailto:acamapps@outlook.com">email</a> | acamapps v1.10
   </div>
 </div>
 
