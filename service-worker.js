@@ -26,7 +26,7 @@ self.addEventListener("activate", (event) => {
     caches.keys().then((keys) =>
       Promise.all(
         keys.map((key) => {
-          if (key !== CACHE_NAME) return caches.delete(key);
+          if (key.startsWith("bulldogscores-") && key !== CACHE_NAME) return caches.delete(key);
         })
       )
     )
